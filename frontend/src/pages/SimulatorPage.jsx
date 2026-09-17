@@ -1,723 +1,82 @@
-import React, { useState, useEffect } from "react";
-import api from "../api/client";
-import Alert from "../components/Alert";
-import {
-  Sliders,
-  Sparkles,
-  RotateCcw,
-  ArrowRight,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+import React, { useEffect, useRef, useState } from 'react';
+import api from '../api/client';
+import './SimulatorPage.css';
+
+const number = value => Number(value).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+const defaults = { months: 12, target_rate: 30, income_change: 0, risk_expense_increase: 0, risk_income_drop_pct: 0, starting_balance: 0 };
+const colors = ['#3b82f6', '#10b981', '#f59e0b'];
+
+function ScenarioChart({ scenarios, months }) {
+  const values = scenarios.flatMap(s => s.points.map(p => p.balance));
+  const low = Math.min(0, ...values), high = Math.max(1, ...values);
+  const x = m => 110 + m / months * 660;
+  const y = v => 265 - (v-low)/(high-low)*220;
+  return <><div className="twin-legend">{scenarios.map((s,i) => <span key={s.key}><i style={{background:colors[i]}}/>{s.label}</span>)}</div>
+    <svg viewBox="0 0 810 325" role="img" aria-label="Three conditional scenarios: cumulative balance by future month. Exact values in the table below." className="twin-chart">
+      {[0,1,2,3,4].map(i => {const v=low+(high-low)*i/4;return <g key={i}><line x1="110" x2="770" y1={y(v)} y2={y(v)} stroke="currentColor" opacity=".15"/><text x="100" y={y(v)+4} textAnchor="end">{number(v)}</text></g>;})}
+      {Array.from({length:months+1},(_,m)=><text key={m} x={x(m)} y="289" textAnchor="middle">{m}</text>)}
+      <text x="440" y="316" textAnchor="middle">Future month (0 = starting balance)</text>
+      {scenarios.map((s,i)=><g key={s.key}><polyline points={s.points.map(p=>`${x(p.month)},${y(p.balance)}`).join(' ')} fill="none" stroke={colors[i]} strokeWidth="3" strokeDasharray={i===0?'':i===1?'9 4':'3 5'}/>{s.points.map(p=><circle key={p.month} cx={x(p.month)} cy={y(p.balance)} r="3.5" fill={colors[i]}><title>{s.label}, month {p.month}: {number(p.balance)}</title></circle>)}</g>)}
+    </svg></>;
+}
 
 export default function SimulatorPage({ setCurrentRoute }) {
-  // Simulation Input State
-  const [incomeDelta, setIncomeDelta] = useState(0);
-  const [expenseReduction, setExpenseReduction] = useState(2000);
-  const [studyDeltaHours, setStudyDeltaHours] = useState(1.0);
-  const [sleepDeltaHours, setSleepDeltaHours] = useState(0.5);
-  const [screenTimeReduction, setScreenTimeReduction] = useState(1.0);
-  const [exerciseExtraMinutes, setExerciseExtraMinutes] = useState(15);
-
-  const [simulationResult, setSimulationResult] = useState(null);
-  const [, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  // Debounced or live simulation call
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      runSimulation();
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [
-    incomeDelta,
-    expenseReduction,
-    studyDeltaHours,
-    sleepDeltaHours,
-    screenTimeReduction,
-    exerciseExtraMinutes,
-  ]);
-
-  async function runSimulation() {
-    try {
-      setLoading(true);
-      setError("");
-      const payload = {
-        income_delta: parseFloat(incomeDelta) || 0,
-        expense_reduction: Math.max(0, parseFloat(expenseReduction) || 0),
-        daily_study_delta_hours: parseFloat(studyDeltaHours) || 0,
-        daily_sleep_delta_hours: parseFloat(sleepDeltaHours) || 0,
-        daily_screen_time_reduction_hours: Math.max(
-          0,
-          parseFloat(screenTimeReduction) || 0,
-        ),
-        weekly_exercise_extra_minutes: Math.max(
-          0,
-          parseInt(exerciseExtraMinutes) || 0,
-        ),
-      };
-
-      const res = await api.post("/api/simulation/what-if", payload);
-      setSimulationResult(res.data);
-    } catch (err) {
-      setError(err.formattedMessage || "Failed to execute simulation.");
-    } finally {
-      setLoading(false);
-    }
+  const [baseline,setBaseline]=useState(null), [inputs,setInputs]=useState({...defaults});
+  const [result,setResult]=useState(null), [error,setError]=useState('');
+  const [loading,setLoading]=useState(true), [running,setRunning]=useState(false), [reload,setReload]=useState(0);
+  const requestId=useRef(0);
+  useEffect(()=>{
+    let active=true; setLoading(true); setError(''); setResult(null);
+    api.get('/api/simulation/financial/baseline').then(r=>{if(active)setBaseline(r.data);})
+      .catch(e=>{if(active){setBaseline(null);setError(e.formattedMessage||'Could not load your financial records.');}})
+      .finally(()=>{if(active)setLoading(false);});
+    return ()=>{active=false;requestId.current++;};
+  },[reload]);
+  function change(key,value){requestId.current++;setRunning(false);setResult(null);setError('');setInputs(p=>({...p,[key]:value}));}
+  async function run(event){
+    event.preventDefault(); const id=++requestId.current;setRunning(true);setError('');setResult(null);
+    try {const response=await api.post('/api/simulation/financial',Object.fromEntries(Object.entries(inputs).map(([k,v])=>[k,Number(v)])));
+      if(id===requestId.current){setResult(response.data);setBaseline(response.data.baseline);}
+    }catch(e){if(id===requestId.current)setError(e.formattedMessage||'Simulation could not run.');}
+    finally{if(id===requestId.current)setRunning(false);}
   }
-
-  function handleReset() {
-    setIncomeDelta(0);
-    setExpenseReduction(0);
-    setStudyDeltaHours(0);
-    setSleepDeltaHours(0);
-    setScreenTimeReduction(0);
-    setExerciseExtraMinutes(0);
-  }
-
-  const res = simulationResult;
-
-  return (
-    <div className="dashboard-content">
-      {/* Hero Header */}
-      <div className="dashboard-hero">
-        <div className="hero-title-area">
-          <div
-            style={{
-              fontSize: "0.74rem",
-              fontWeight: 700,
-              letterSpacing: "1px",
-              color: "var(--primary)",
-              textTransform: "uppercase",
-              marginBottom: "0.25rem",
-            }}
-          >
-            GROWTHSYNC INNOVATION ENGINE
-          </div>
-          <h1>GrowthSync Future Simulator</h1>
-          <p className="hero-subtitle">
-            &ldquo;See how today&apos;s decisions could affect tomorrow&apos;s
-            outcomes.&rdquo;
-          </p>
-        </div>
-
-        <div className="hero-quick-actions">
-          <button
-            onClick={handleReset}
-            className="btn btn-secondary btn-sm"
-            style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}
-          >
-            <RotateCcw size={14} />
-            <span>Reset Sliders</span>
-          </button>
-          <button
-            onClick={() => setCurrentRoute("forecasting")}
-            className="btn btn-primary btn-sm"
-          >
-            <span>&larr; Return to Forecasting</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Stateless Guarantee Notice */}
-      <div
-        style={{
-          background: "rgba(16, 185, 129, 0.1)",
-          border: "1px solid rgba(16, 185, 129, 0.3)",
-          color: "#34d399",
-          padding: "0.65rem 1rem",
-          borderRadius: "8px",
-          marginBottom: "1.25rem",
-          fontSize: "0.8rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-        }}
-      >
-        <ShieldCheck size={18} flexShrink={0} />
-        <span>
-          <strong>Safe Simulation Sandbox:</strong> Variable adjustments are
-          calculated statelessly in memory. Your saved PostgreSQL database
-          records are never modified.
-        </span>
-      </div>
-
-      {error && (
-        <Alert type="error" message={error} onClose={() => setError("")} />
-      )}
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: "1.25rem",
-        }}
-      >
-        {/* Left Column: Interactive Simulation Sliders */}
-        <div className="analytics-card">
-          <div className="analytics-card-header">
-            <div className="card-title-group">
-              <h2>
-                <Sliders size={18} className="text-emerald-400" />
-                <span>Simulation Controls</span>
-              </h2>
-              <p>Tune prospective lifestyle & financial variables</p>
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.25rem",
-              marginTop: "0.5rem",
-            }}
-          >
-            {/* Control 1: Expense Reduction */}
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.82rem",
-                  marginBottom: "0.3rem",
-                }}
-              >
-                <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                  Monthly Expense Reduction
-                </span>
-                <span style={{ fontWeight: 700, color: "#10b981" }}>
-                  -₹{parseInt(expenseReduction).toLocaleString("en-IN")}/mo
-                </span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="25000"
-                step="500"
-                value={expenseReduction}
-                onChange={(e) => setExpenseReduction(e.target.value)}
-                style={{
-                  width: "100%",
-                  accentColor: "#10b981",
-                  cursor: "pointer",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.68rem",
-                  color: "var(--text-muted)",
-                  marginTop: "0.15rem",
-                }}
-              >
-                <span>₹0</span>
-                <span>₹10k</span>
-                <span>₹25k</span>
-              </div>
-            </div>
-
-            {/* Control 2: Income Change */}
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.82rem",
-                  marginBottom: "0.3rem",
-                }}
-              >
-                <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                  Monthly Income Delta
-                </span>
-                <span
-                  style={{
-                    fontWeight: 700,
-                    color: incomeDelta >= 0 ? "#10b981" : "#ef4444",
-                  }}
-                >
-                  {incomeDelta >= 0
-                    ? `+₹${parseInt(incomeDelta).toLocaleString("en-IN")}`
-                    : `-₹${Math.abs(parseInt(incomeDelta)).toLocaleString("en-IN")}`}
-                  /mo
-                </span>
-              </div>
-              <input
-                type="range"
-                min="-20000"
-                max="50000"
-                step="1000"
-                value={incomeDelta}
-                onChange={(e) => setIncomeDelta(e.target.value)}
-                style={{
-                  width: "100%",
-                  accentColor: "#3b82f6",
-                  cursor: "pointer",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.68rem",
-                  color: "var(--text-muted)",
-                  marginTop: "0.15rem",
-                }}
-              >
-                <span>-₹20k</span>
-                <span>Baseline (₹0)</span>
-                <span>+₹50k</span>
-              </div>
-            </div>
-
-            {/* Control 3: Daily Study Adjustment */}
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.82rem",
-                  marginBottom: "0.3rem",
-                }}
-              >
-                <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                  Daily Study Hours Delta
-                </span>
-                <span style={{ fontWeight: 700, color: "#3b82f6" }}>
-                  {studyDeltaHours >= 0
-                    ? `+${studyDeltaHours} hrs/day`
-                    : `${studyDeltaHours} hrs/day`}
-                </span>
-              </div>
-              <input
-                type="range"
-                min="-2.0"
-                max="4.0"
-                step="0.5"
-                value={studyDeltaHours}
-                onChange={(e) => setStudyDeltaHours(e.target.value)}
-                style={{
-                  width: "100%",
-                  accentColor: "#3b82f6",
-                  cursor: "pointer",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.68rem",
-                  color: "var(--text-muted)",
-                  marginTop: "0.15rem",
-                }}
-              >
-                <span>-2.0 hrs</span>
-                <span>0 hrs</span>
-                <span>+4.0 hrs</span>
-              </div>
-            </div>
-
-            {/* Control 4: Daily Screen Time Reduction */}
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.82rem",
-                  marginBottom: "0.3rem",
-                }}
-              >
-                <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                  Screen Time Reduction
-                </span>
-                <span style={{ fontWeight: 700, color: "#f59e0b" }}>
-                  -{screenTimeReduction} hrs/day
-                </span>
-              </div>
-              <input
-                type="range"
-                min="0.0"
-                max="5.0"
-                step="0.5"
-                value={screenTimeReduction}
-                onChange={(e) => setScreenTimeReduction(e.target.value)}
-                style={{
-                  width: "100%",
-                  accentColor: "#f59e0b",
-                  cursor: "pointer",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.68rem",
-                  color: "var(--text-muted)",
-                  marginTop: "0.15rem",
-                }}
-              >
-                <span>0 hrs</span>
-                <span>2.5 hrs</span>
-                <span>5.0 hrs</span>
-              </div>
-            </div>
-
-            {/* Control 5: Extra Exercise Minutes */}
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.82rem",
-                  marginBottom: "0.3rem",
-                }}
-              >
-                <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>
-                  Daily Extra Exercise
-                </span>
-                <span style={{ fontWeight: 700, color: "#10b981" }}>
-                  +{exerciseExtraMinutes} mins/day
-                </span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="60"
-                step="5"
-                value={exerciseExtraMinutes}
-                onChange={(e) => setExerciseExtraMinutes(e.target.value)}
-                style={{
-                  width: "100%",
-                  accentColor: "#10b981",
-                  cursor: "pointer",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "0.68rem",
-                  color: "var(--text-muted)",
-                  marginTop: "0.15rem",
-                }}
-              >
-                <span>0 mins</span>
-                <span>30 mins</span>
-                <span>60 mins</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Side-by-Side Impact Comparison */}
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}
-        >
-          {/* Main Outcome Comparison Grid */}
-          <div className="analytics-card">
-            <div className="analytics-card-header">
-              <div className="card-title-group">
-                <h2>
-                  <Zap size={18} className="text-emerald-400" />
-                  <span>Simulated Outcome Comparison</span>
-                </h2>
-                <p>
-                  Real-time projection: Current Baseline vs Simulated Scenario
-                </p>
-              </div>
-            </div>
-
-            {res && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "1rem",
-                  marginTop: "0.5rem",
-                }}
-              >
-                {/* Metric 1: Monthly Savings */}
-                <div
-                  style={{
-                    background: "var(--bg-hover)",
-                    padding: "0.85rem 1rem",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "0.8rem",
-                        color: "var(--text-muted)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Monthly Savings Trajectory
-                    </span>
-                    <span
-                      className="sidebar-badge"
-                      style={{
-                        background:
-                          res.monthly_savings.delta >= 0
-                            ? "rgba(16, 185, 129, 0.2)"
-                            : "rgba(239, 68, 68, 0.2)",
-                        color:
-                          res.monthly_savings.delta >= 0
-                            ? "#10b981"
-                            : "#ef4444",
-                        fontWeight: 700,
-                      }}
-                    >
-                      {res.monthly_savings.delta >= 0
-                        ? `+₹${res.monthly_savings.delta.toLocaleString("en-IN")}`
-                        : `-₹${Math.abs(res.monthly_savings.delta).toLocaleString("en-IN")}`}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "0.75rem",
-                      marginTop: "0.35rem",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "1.1rem",
-                        color: "var(--text-secondary)",
-                        textDecoration: "line-through",
-                      }}
-                    >
-                      ₹
-                      {res.monthly_savings.current_value.toLocaleString(
-                        "en-IN",
-                      )}
-                    </span>
-                    <ArrowRight size={14} className="text-muted" />
-                    <span
-                      style={{
-                        fontSize: "1.45rem",
-                        fontWeight: 800,
-                        color: "var(--text-primary)",
-                      }}
-                    >
-                      ₹
-                      {res.monthly_savings.simulated_value.toLocaleString(
-                        "en-IN",
-                      )}{" "}
-                      / mo
-                    </span>
-                  </div>
-                </div>
-
-                {/* Metric 2: Annual Savings Projection */}
-                <div
-                  style={{
-                    background: "var(--bg-hover)",
-                    padding: "0.85rem 1rem",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "0.8rem",
-                        color: "var(--text-muted)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      1-Year Cumulative Capital Growth
-                    </span>
-                    <span
-                      className="sidebar-badge"
-                      style={{
-                        background: "rgba(16, 185, 129, 0.2)",
-                        color: "#10b981",
-                        fontWeight: 700,
-                      }}
-                    >
-                      +
-                      {res.annual_savings_projection.delta.toLocaleString(
-                        "en-IN",
-                      )}{" "}
-                      1-Yr Delta
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "0.75rem",
-                      marginTop: "0.35rem",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "1.1rem",
-                        color: "var(--text-secondary)",
-                        textDecoration: "line-through",
-                      }}
-                    >
-                      ₹
-                      {res.annual_savings_projection.current_value.toLocaleString(
-                        "en-IN",
-                      )}
-                    </span>
-                    <ArrowRight size={14} className="text-muted" />
-                    <span
-                      style={{
-                        fontSize: "1.45rem",
-                        fontWeight: 800,
-                        color: "#10b981",
-                      }}
-                    >
-                      ₹
-                      {res.annual_savings_projection.simulated_value.toLocaleString(
-                        "en-IN",
-                      )}{" "}
-                      / yr
-                    </span>
-                  </div>
-                </div>
-
-                {/* Metric 3: Productivity Score */}
-                <div
-                  style={{
-                    background: "var(--bg-hover)",
-                    padding: "0.85rem 1rem",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "0.8rem",
-                        color: "var(--text-muted)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Composite Productivity Score
-                    </span>
-                    <span
-                      className="sidebar-badge"
-                      style={{
-                        background:
-                          res.productivity_score.delta >= 0
-                            ? "rgba(59, 130, 246, 0.2)"
-                            : "rgba(239, 68, 68, 0.2)",
-                        color:
-                          res.productivity_score.delta >= 0
-                            ? "#60a5fa"
-                            : "#ef4444",
-                        fontWeight: 700,
-                      }}
-                    >
-                      {res.productivity_score.delta >= 0
-                        ? `+${res.productivity_score.delta} Points`
-                        : `${res.productivity_score.delta} Points`}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      gap: "0.75rem",
-                      marginTop: "0.35rem",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "1.1rem",
-                        color: "var(--text-secondary)",
-                        textDecoration: "line-through",
-                      }}
-                    >
-                      {res.productivity_score.current_value}%
-                    </span>
-                    <ArrowRight size={14} className="text-muted" />
-                    <span
-                      style={{
-                        fontSize: "1.45rem",
-                        fontWeight: 800,
-                        color: "#3b82f6",
-                      }}
-                    >
-                      {res.productivity_score.simulated_value}% Index
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Contextual Takeaways Card */}
-          <div className="analytics-card">
-            <div className="analytics-card-header">
-              <div className="card-title-group">
-                <h2>
-                  <Sparkles size={18} className="text-orange-400" />
-                  <span>Compound Impact Takeaways</span>
-                </h2>
-                <p>Actionable projections translated from your simulation</p>
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.65rem",
-                marginTop: "0.5rem",
-              }}
-            >
-              {res?.insights?.map((insight, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "0.5rem",
-                    fontSize: "0.8rem",
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.45,
-                    padding: "0.45rem 0",
-                    borderBottom:
-                      idx < res.insights.length - 1
-                        ? "1px solid var(--border-color)"
-                        : "none",
-                  }}
-                >
-                  <Sparkles
-                    size={14}
-                    className="text-emerald-400"
-                    style={{ flexShrink: 0, marginTop: "2px" }}
-                  />
-                  <span>{insight}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const field=(key,label,min,max,step='any')=><label className="twin-field" key={key}>{label}<input type="number" required min={min} max={max} step={step} value={inputs[key]} onChange={e=>change(key,e.target.value)}/></label>;
+  return <div className="dashboard-content financial-twin">
+    <div className="dashboard-hero"><div><p className="twin-eyebrow">MILESTONE 3 · PHASE 1</p><h1>Digital Twin Simulator</h1><p>Explore financial decisions using your saved budget.</p></div><button className="btn btn-secondary" onClick={()=>setCurrentRoute('forecasting')}>Back to Forecasting</button></div>
+    <div className="twin-notice">Financial scenarios are conditional budget calculations. Your saved records remain unchanged.</div>
+    {error&&<p role="alert" className="twin-error">{error}</p>}
+    {loading?<p role="status">Loading your current situation…</p>:<>
+      <section className="card twin-section"><div className="twin-heading"><h2>1. Current situation</h2><button className="btn btn-secondary" disabled={running} onClick={()=>setReload(n=>n+1)}>Refresh records</button></div>
+      {!baseline?.available?<p>{baseline?.message||'Records unavailable. Select Refresh records to retry.'}</p>:<>
+        <p>Latest budget: {baseline.latest.date} · {baseline.observed_months} observed month(s)</p>
+        <div className="twin-stats">{[['Monthly income',baseline.latest.income],['Monthly expenses',baseline.latest.expenses],['Monthly savings',baseline.latest.savings]].map(([label,value])=><div key={label}><span>{label}</span><strong>{number(value)}</strong></div>)}<div><span>Savings rate</span><strong>{baseline.savings_rate===null?'N/A':`${number(baseline.savings_rate)}%`}</strong></div></div>
+        <p>{baseline.method}</p><p>Observed average income: {number(baseline.average_income)} · Average expenses: {number(baseline.average_expenses)} · Expense range: {baseline.expense_range.map(number).join(' – ')}</p>
+        {baseline.warnings.map(w=><p className="twin-notice" key={w}>{w}</p>)}
+        {baseline.excluded_records>0&&<p>{baseline.excluded_records} invalid or future-dated record(s) excluded.</p>}
+        <details><summary>Explore recorded monthly budgets</summary><div className="twin-table"><table><thead><tr><th>Month</th><th>Income</th><th>Expenses</th><th>Savings</th></tr></thead><tbody>{baseline.history.map(p=><tr key={p.month}><td>{p.month}</td><td>{number(p.income)}</td><td>{number(p.expenses)}</td><td>{number(p.savings)}</td></tr>)}</tbody></table></div></details>
+      </>}</section>
+      {baseline?.available&&<>
+      <form className="card twin-section" onSubmit={run}><h2>2. Define your decision</h2><p>Amounts use your recorded currency. Zero is the initial assumption for changes and existing balance; edit it if needed.</p>
+        <div className="twin-fields"><label className="twin-field">Duration<select value={inputs.months} onChange={e=>change('months',e.target.value)}>{[3,6,12].map(m=><option key={m} value={m}>{m} months</option>)}</select></label>
+        {field('target_rate','Proposed savings target (%)',0,100)}
+        {field('income_change','Proposed monthly income change',-baseline.latest.income,1e12)}
+        {field('starting_balance','Existing savings balance (optional)',0,1e12)}
+        {field('risk_expense_increase','Risk: extra monthly expenses',0,1e12)}
+        {field('risk_income_drop_pct','Risk: income decrease (%)',0,100)}</div>
+        <p>The proposed target determines its expense budget. Risk changes apply to the current plan throughout the selected duration.</p>
+        <div className="twin-actions"><button className="btn btn-primary" disabled={running}>{running?'Calculating…':'Compare three scenarios'}</button><button type="button" className="btn btn-secondary" onClick={()=>{requestId.current++;setInputs({...defaults});setResult(null);setRunning(false);setError('');}}>Reset assumptions</button></div>
+      </form>
+      {result&&<><section className="card twin-section"><h2>3. Compare future outcomes</h2><p>Cumulative balance · {result.months} months · same currency as your records</p>
+        <ScenarioChart scenarios={result.scenarios} months={result.months}/>
+        <div className="twin-table"><table><thead><tr><th>Scenario</th><th>Monthly income</th><th>Monthly expenses</th><th>Monthly savings</th><th>Ending balance</th><th>Vs current plan</th></tr></thead><tbody>{result.scenarios.map(s=><tr key={s.key}><th>{s.label}</th><td>{number(s.income)}</td><td>{number(s.expenses)}</td><td>{number(s.monthly_savings)}</td><td>{number(s.ending_balance)}</td><td>{number(s.difference)}</td></tr>)}</tbody></table></div>
+        <p>{result.required_expense_reduction>=0?'Required monthly expense reduction':'Additional expense allowance'} for proposed plan: <strong>{number(Math.abs(result.required_expense_reduction))}</strong>.</p>
+        {result.scenarios.map(s=><p key={s.key}><strong>{s.label}:</strong> {s.assumption}</p>)}
+        <details><summary>Exact monthly comparison</summary><div className="twin-table"><table><thead><tr><th>Future month</th>{result.scenarios.map(s=><th key={s.key}>{s.label}</th>)}</tr></thead><tbody>{result.scenarios[0].points.map((p,i)=><tr key={p.month}><td>{p.month}</td>{result.scenarios.map(s=><td key={s.key}>{number(s.points[i].balance)}</td>)}</tr>)}</tbody></table></div></details>
+      </section><section className="card twin-section"><h2>4. Personalized decision recommendations</h2><p>Rule-based explanations from your recorded budget and selected assumptions.</p>
+        <div className="twin-recommendations">{result.recommendations.map(r=><article key={r.title}><h3>{r.title}</h3><p>{r.observation}</p><p><strong>Action:</strong> {r.action}</p><p><strong>Impact:</strong> {r.impact}</p><p><strong>Condition:</strong> {r.condition}</p></article>)}</div>
+        <details><summary>Calculation assumptions</summary><ul>{result.assumptions.map(a=><li key={a}>{a}</li>)}</ul></details>
+      </section></>}
+      </>}
+    </>}
+  </div>;
 }

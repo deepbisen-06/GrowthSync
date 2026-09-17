@@ -1,0 +1,25 @@
+.financial-twin { color: var(--text-primary); }
+.financial-twin .twin-section { padding: 1.5rem; margin: 1.3rem 0; }
+.financial-twin h2 { margin: 0 0 1rem; font-size: 1.25rem; }
+.financial-twin p { line-height: 1.65; margin: .6rem 0; }
+.twin-eyebrow { color: var(--primary); font-size: .8rem; font-weight: 700; letter-spacing: .08em; }
+.twin-heading,.twin-actions,.twin-legend { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.twin-heading { justify-content: space-between; }
+.twin-notice { padding: .9rem 1rem; background: rgba(59,130,246,.1); border-left: 3px solid #3b82f6; border-radius: .4rem; }
+.twin-error { padding: 1rem; border: 1px solid #ef4444; border-radius: .5rem; }
+.twin-stats,.twin-fields,.twin-recommendations { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); margin: 1rem 0; }
+.twin-stats>div,.twin-recommendations article { padding: 1rem; border: 1px solid var(--border-color,#cbd5e1); border-radius: .7rem; }
+.twin-stats span,.twin-stats strong { display: block; }
+.twin-stats strong { font-size: 1.65rem; margin-top: .5rem; }
+.twin-field { display:flex; flex-direction:column; gap:.5rem; font-weight:600; }
+.twin-field input,.twin-field select { padding:.8rem; border:1px solid var(--border-color,#cbd5e1); border-radius:.5rem; color:var(--text-primary); background:var(--bg-card,var(--bg-secondary)); min-width:0; font:inherit; }
+.twin-chart { width:100%; display:block; margin:1rem 0; color:var(--text-secondary); }
+.twin-chart text { fill:currentColor; font-size:12px; }
+.twin-legend span { display:flex; gap:.45rem; align-items:center; }
+.twin-legend i { width:.7rem; height:.7rem; border-radius:50%; }
+.twin-table { overflow-x:auto; margin:1rem 0; }
+.twin-table table { width:100%; border-collapse:collapse; text-align:left; }
+.twin-table th,.twin-table td { padding:.8rem; border-bottom:1px solid var(--border-color,#cbd5e1); white-space:nowrap; }
+.financial-twin summary { cursor:pointer; padding:.6rem 0; font-weight:600; }
+.financial-twin button:disabled { opacity:.6; cursor:wait; }
+@media(max-width:600px) { .financial-twin .twin-section { padding:1rem; } .twin-stats,.twin-fields { grid-template-columns:1fr; } }
