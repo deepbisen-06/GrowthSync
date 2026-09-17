@@ -1,0 +1,8 @@
+# SAMPLE DATASET — Clearly labeled for reference and testing only.
+# Do not present as real collected user data.
+user_id,study_hours,subjects,academic_goal,study_date,created_at
+101,4.5,"Machine Learning, Linear Algebra",Complete Project Milestone 1,2026-08-01,2026-08-01 20:00:00
+102,6.0,"Data Structures, Operating Systems",Ace Technical Interview,2026-08-02,2026-08-02 21:15:00
+103,3.5,"Database Management Systems, SQL",Certify in PostgreSQL,2026-08-03,2026-08-03 19:30:00
+104,5.0,"Distributed Systems, Cloud Architecture",Design microservices pipeline,2026-08-04,2026-08-04 22:00:00
+105,7.0,"Deep Learning, Natural Language Processing",Publish research paper draft,2026-08-05,2026-08-05 23:00:00

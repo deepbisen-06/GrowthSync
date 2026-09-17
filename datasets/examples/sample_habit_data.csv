@@ -1,0 +1,8 @@
+# SAMPLE DATASET — Clearly labeled for reference and testing only.
+# Do not present as real collected user data.
+user_id,sleep_hours,exercise_minutes,screen_time,habit_notes,record_date,created_at
+101,7.5,45,6.0,Morning run and meditation; focused study session.,2026-08-01,2026-08-01 22:30:00
+102,6.5,30,8.5,Heavy screen time preparing presentation; evening walk.,2026-08-02,2026-08-02 23:00:00
+103,8.0,60,5.0,Gym workout (weights); good sleep hygiene.,2026-08-03,2026-08-03 22:00:00
+104,7.0,20,7.5,Quick cardio; worked on frontend UI design.,2026-08-04,2026-08-04 22:45:00
+105,6.0,40,9.0,Late coding night; short jogging break.,2026-08-05,2026-08-05 23:30:00

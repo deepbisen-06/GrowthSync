@@ -1,0 +1,9 @@
+.personal-trends { margin: 1.5rem 0; color: var(--text-primary); }
+.personal-trends-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.personal-trends p { line-height: 1.6; margin: .7rem 0; }
+.personal-trends select { margin-left: .5rem; padding: .5rem; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--text-muted); border-radius: 6px; max-width: 100%; }
+.personal-series { margin-top: 1.5rem; border-top: 1px solid var(--text-muted); padding-top: 1rem; }
+.personal-trend-svg { width: 100%; height: auto; display: block; min-height: 170px; }
+.personal-trend-svg text { fill: var(--text-secondary); font-size: 12px; }
+.personal-trend-svg circle:focus { outline: none; stroke: var(--text-primary); stroke-width: 3; }
+.personal-trends summary { cursor: pointer; padding: .5rem 0; }

@@ -1,0 +1,8 @@
+# SAMPLE DATASET — Clearly labeled for reference and testing only.
+# Do not present as real collected user data.
+user_id,monthly_income,monthly_expenses,monthly_savings,financial_goal,created_at
+101,4500.00,2800.00,1700.00,Save for Masters Degree,2026-08-01 09:15:00
+102,6200.00,3900.00,2300.00,Emergency Fund & Investments,2026-08-02 11:30:00
+103,3200.00,2100.00,1100.00,Clear Student Loan,2026-08-03 14:45:00
+104,5000.00,3100.00,1900.00,Down payment for apartment,2026-08-04 16:20:00
+105,7500.00,4200.00,3300.00,Retirement & Index Funds,2026-08-05 18:00:00
