@@ -1,4 +1,17 @@
 .financial-twin { color: var(--text-primary); }
+.twin-presets { display:flex; flex-wrap:wrap; gap:.75rem; margin:1rem 0; }
+.twin-presets button { padding:.85rem 1.1rem; border:1px solid var(--border-color,#cbd5e1); border-radius:.7rem; background:var(--bg-card,var(--bg-secondary)); color:var(--text-primary); font:inherit; font-weight:600; cursor:pointer; }
+.twin-presets button:hover { border-color:#10b981; background:rgba(16,185,129,.1); }
+.financial-twin :is(button,input,select,summary):focus-visible { outline:3px solid #3b82f6; outline-offset:3px; }
+.twin-selection { padding:.85rem; background:rgba(59,130,246,.07); border-radius:.5rem; }
+.twin-advanced { border-top:1px solid var(--border-color,#cbd5e1); margin:1rem 0; padding-top:.5rem; }
+.twin-outcomes { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:1.2rem 0; }
+.twin-outcome { border:1px solid var(--border-color,#cbd5e1); border-top:4px solid #3b82f6; border-radius:.8rem; padding:1rem; }
+.twin-outcome-proposed { border-top-color:#10b981; }
+.twin-outcome-risk { border-top-color:#f59e0b; }
+.twin-outcome h3 { font-size:1rem; margin:0; }
+.twin-outcome strong { font-size:1.8rem; overflow-wrap:anywhere; }
+.twin-module-nav { display:flex; gap:.75rem; flex-wrap:wrap; padding:1rem 2rem 0; }
 .financial-twin .twin-section { padding: 1.5rem; margin: 1.3rem 0; }
 .financial-twin h2 { margin: 0 0 1rem; font-size: 1.25rem; }
 .financial-twin p { line-height: 1.65; margin: .6rem 0; }

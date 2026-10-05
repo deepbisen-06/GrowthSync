@@ -24,8 +24,8 @@ try:
         max_overflow=20,
     )
 except Exception as e:
-    logger.error(f"FATAL: Failed to create SQLAlchemy engine with DATABASE_URL: {e}")
-    raise RuntimeError(f"Database Engine Initialization Failed: {e}")
+    logger.error("Failed to initialize the database engine.")
+    raise RuntimeError("Database initialization failed. Check backend configuration.") from None
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -37,12 +37,9 @@ def check_db_connection() -> bool:
         with engine.connect() as conn:
             result = conn.execute(text("SELECT 1")).scalar()
             return result == 1
-    except Exception as e:
-        logger.error(f"PostgreSQL connection error: {e}")
-        raise ConnectionError(
-            f"FATAL: Could not connect to PostgreSQL at {settings.DATABASE_URL}. "
-            f"Ensure PostgreSQL is running and credentials in .env are correct. Root error: {e}"
-        )
+    except Exception:
+        logger.error("PostgreSQL is unavailable. Check server configuration and connectivity.")
+        raise ConnectionError("PostgreSQL is unavailable.") from None
 
 
 def get_db():

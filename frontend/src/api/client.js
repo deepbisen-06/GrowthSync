@@ -6,6 +6,9 @@ const getApiBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
+  if (import.meta.env.PROD && typeof window !== "undefined") {
+    return window.location.origin; // Same-origin reverse proxy in the deployment package.
+  }
   if (typeof window !== "undefined" && window.location) {
     const hostname = window.location.hostname;
     const protocol = window.location.protocol;

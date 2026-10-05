@@ -16,6 +16,7 @@ import DatasetsPage from "./pages/DatasetsPage";
 import ActivityHistoryPage from "./pages/ActivityHistoryPage";
 import ForecastingPage from "./pages/ForecastingPage";
 import SimulatorPage from "./pages/SimulatorPage";
+import FloatingChat from "./components/FloatingChat";
 import ExpensesPage from "./pages/ExpensesPage";
 
 const PUBLIC_ROUTES = [
@@ -199,6 +200,7 @@ function AppContent() {
         />
 
         <main style={{ flex: 1 }}>{renderPage()}</main>
+        {user && <FloatingChat key={user.id} setCurrentRoute={setCurrentRoute} />}
 
         <footer
           style={{

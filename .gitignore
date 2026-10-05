@@ -66,3 +66,13 @@ datasets/raw/*
 datasets/processed/*
 !datasets/processed/.gitkeep
 artifacts/
+
+# Milestone 4 deployment secrets and local state
+.env
+.env.*
+!.env.example
+!.env.docker.example
+**/__pycache__/
+**/node_modules/
+**/dist/
+*.log

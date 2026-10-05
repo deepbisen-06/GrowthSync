@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: growthsync
+      POSTGRES_USER: growthsync
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.docker}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U growthsync -d growthsync"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.backend
+    environment:
+      DATABASE_URL: postgresql+psycopg2://growthsync:${POSTGRES_PASSWORD}@db:5432/growthsync
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in .env.docker}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      ALLOWED_ORIGINS: ${FRONTEND_URL:-http://localhost:8080}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:8080}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.6-flash}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health',timeout=4)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.web
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    ports:
+      - "${WEB_HTTP_PORT:-8080}:80"
+      - "${WEB_HTTPS_PORT:-8443}:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

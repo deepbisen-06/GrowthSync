@@ -103,7 +103,7 @@ def login_user(payload: LoginRequest, response: Response, db: Session = Depends(
         max_age=max_age,
         expires=max_age,
         samesite="lax",
-        secure=False,  # Set to True in production HTTPS
+        secure=settings.ENVIRONMENT == "production",
         path="/",
     )
 
@@ -140,7 +140,7 @@ def logout_user(response: Response, request: Request, db: Session = Depends(get_
         except Exception:
             pass
 
-    response.delete_cookie(key="access_token", path="/", samesite="lax")
+    response.delete_cookie(key="access_token", path="/", samesite="lax", secure=settings.ENVIRONMENT == "production", httponly=True)
     return {"message": "Successfully logged out."}
 
 
@@ -160,6 +160,9 @@ def forgot_password(payload: ForgotPasswordRequest, db: Session = Depends(get_db
     - In development mode, logs the reset URL to the backend console for testing.
     - Always returns a safe generic response to prevent account/email enumeration.
     """
+    if settings.ENVIRONMENT == "production":
+        raise HTTPException(503, "Password reset email delivery is not configured. Please contact the project administrator.")
+
     email_clean = payload.email.lower().strip()
     user = db.query(User).filter(User.email == email_clean).first()
 

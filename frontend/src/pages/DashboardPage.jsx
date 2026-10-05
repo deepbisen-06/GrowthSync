@@ -7,6 +7,7 @@ import GrowthOverview from "../components/GrowthOverview";
 import GrowthJourney from "../components/GrowthJourney";
 import RecentActivityCard from "../components/RecentActivityCard";
 import Alert from "../components/Alert";
+import DashboardData from "../components/DashboardData";
 import ModelEvaluationCards from "../components/ModelEvaluationCards";
 import {
   DollarSign,
@@ -24,7 +25,8 @@ export default function DashboardPage({ setCurrentRoute }) {
   const [habitRecords, setHabitRecords] = useState([]);
   const [activities, setActivities] = useState([]);
   const [summary, setSummary] = useState(null);
-  const [, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(0);
   const [error, setError] = useState("");
 
   // Fetch all user growth data in parallel
@@ -34,6 +36,7 @@ export default function DashboardPage({ setCurrentRoute }) {
     async function loadDashboardData() {
       try {
         setLoading(true);
+        setError("");
         const [finRes, stdRes, hbtRes, actRes, sumRes] = await Promise.all([
           api.get("/api/financial-records"),
           api.get("/api/study-records"),
@@ -64,7 +67,7 @@ export default function DashboardPage({ setCurrentRoute }) {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [refresh]);
 
   // Time-aware greeting
   const getGreeting = () => {
@@ -145,6 +148,7 @@ export default function DashboardPage({ setCurrentRoute }) {
             <TrendingUp size={14} />
             <span>AI Forecasting &rarr;</span>
           </button>
+
         </div>
       </div>
 
@@ -152,6 +156,7 @@ export default function DashboardPage({ setCurrentRoute }) {
         <Alert type="error" message={error} onClose={() => setError("")} />
       )}
 
+      <button className="btn btn-secondary btn-sm" disabled={loading} onClick={() => setRefresh(v => v + 1)}>{loading ? "Loading your data…" : "Refresh dashboard"}</button>
       {/* 2. 4 KPI Metric Cards */}
       <div className="metrics-grid">
         {/* Card 1: Financial Health */}
@@ -159,8 +164,8 @@ export default function DashboardPage({ setCurrentRoute }) {
           title="Financial Health"
           value={
             latestFinancial
-              ? `$${latestFinancial.monthly_savings.toLocaleString()}`
-              : "$0"
+              ? `${latestFinancial.monthly_savings.toLocaleString()}`
+              : "—"
           }
           unit={latestFinancial ? "/ mo" : ""}
           trendText={
@@ -170,7 +175,7 @@ export default function DashboardPage({ setCurrentRoute }) {
             savingsRate !== null && savingsRate >= 20 ? "positive" : "neutral"
           }
           subtext={
-            latestFinancial ? "Monthly Savings" : "Log financial records"
+            latestFinancial ? "Monthly savings · saved currency units" : "Log financial records"
           }
           icon={DollarSign}
           colorVariant="emerald"
@@ -240,10 +245,12 @@ export default function DashboardPage({ setCurrentRoute }) {
           icon={Sparkles}
           colorVariant="orange"
           sparklineData={
-            activities.length > 0 ? [1, 2, activities.length] : [0, 0]
+            []
           }
         />
       </div>
+
+      <DashboardData financial={financialRecords} study={studyRecords} habits={habitRecords} setCurrentRoute={setCurrentRoute} />
 
       <ModelEvaluationCards />
 
