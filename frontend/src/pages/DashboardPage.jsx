@@ -8,6 +8,7 @@ import GrowthJourney from "../components/GrowthJourney";
 import RecentActivityCard from "../components/RecentActivityCard";
 import Alert from "../components/Alert";
 import DashboardData from "../components/DashboardData";
+import DashboardGraphs from "../components/DashboardGraphs";
 import ModelEvaluationCards from "../components/ModelEvaluationCards";
 import {
   DollarSign,
@@ -249,6 +250,8 @@ export default function DashboardPage({ setCurrentRoute }) {
           }
         />
       </div>
+
+      <DashboardGraphs financial={financialRecords} study={studyRecords} habits={habitRecords} loading={loading} error={error} />
 
       <DashboardData financial={financialRecords} study={studyRecords} habits={habitRecords} setCurrentRoute={setCurrentRoute} />
 

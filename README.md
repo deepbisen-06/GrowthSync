@@ -4,7 +4,7 @@
 
 ![GrowthSync Banner](https://img.shields.io/badge/GrowthSync-Personal%20Analytics%20Platform-4F46E5?style=for-the-badge&logo=fastapi&logoColor=white)
 
-**An intelligent, full-stack personal analytics, decision-support, and digital-twin simulation platform unifying financial budgeting, deep-work study tracking, habit streaks, predictive forecasting, AI-driven recommendations, and interactive conversational assistance.**
+**An intelligent, full-stack personal analytics, decision-support, and digital-twin simulation platform unifying financial budgeting, deep-work tracking, habit streaks, predictive forecasting, AI-driven recommendations, and conversational assistance.**
 
 *Developed by **Deep Bisen** for the **Infosys Springboard Internship**.*
 
@@ -15,10 +15,11 @@
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-[![Scikit--Learn](https://img.shields.io/badge/Scikit--Learn-1.4+-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.4+-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Caddy](https://img.shields.io/badge/Caddy-2.9-22B573?style=flat-square&logo=caddy&logoColor=white)](https://caddyserver.com/)
 [![Tests](https://img.shields.io/badge/Pytest-142%20Passed-success?style=flat-square&logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![Code Style](https://img.shields.io/badge/Code%20Style-Ruff-000000?style=flat-square&logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 </div>
@@ -30,6 +31,7 @@
 - [Overview](#-overview)
 - [Key Features](#-key-features)
 - [System Architecture](#-system-architecture)
+- [Digital Twin & Analytics Methodology](#-digital-twin--analytics-methodology)
 - [Technology Stack](#-technology-stack)
 - [Repository Structure](#-repository-structure)
 - [Getting Started](#-getting-started)
@@ -37,74 +39,76 @@
   - [Option A: Quick Local Development (Venv + Vite)](#option-a-quick-local-development)
   - [Option B: Containerized Deployment (Docker Compose + Caddy)](#option-b-containerized-deployment-docker-compose)
 - [Environment Configuration](#-environment-configuration)
-- [Verification & Quality Assurance](#-verification--quality-assurance)
 - [API Endpoints Overview](#-api-endpoints-overview)
+- [Verification & Quality Assurance](#-verification--quality-assurance)
 - [Milestone Roadmap](#-milestone-roadmap)
+- [Contributing](#-contributing)
 - [License & Acknowledgements](#-license--acknowledgements)
 
 ---
 
 ## 🌟 Overview
 
-**GrowthSync** bridges the gap between daily personal tracking and actionable predictive intelligence. Rather than isolating personal finances, daily habits, and study productivity into disconnected silos, GrowthSync synthesizes them into an integrated operational dashboard and decision-support engine.
+**GrowthSync** addresses a pervasive issue in personal productivity: data fragmentation. While individuals frequently track their personal budgets, academic study sessions, and daily wellness habits across multiple disjointed applications, these tools operate in isolation without offering cohesive decision intelligence.
 
-By modeling user historical data through regression trend fitting, heuristic evaluation, and digital twin simulation algorithms, GrowthSync empowers users to:
-1. **Unify Operational Visibility**: Track finances, expenses, study hours, and daily habits in one responsive interface.
-2. **Forecast Future Trajectories**: Project savings curves, academic progress, and habit consistency using time-series regression.
-3. **Simulate Scenarios with Digital Twins**:
-   - **Financial Twin**: Simulate savings balances, discretionary spending cuts, and runway projections over 30, 60, and 90-day horizons.
-   - **Routine Twin**: Evaluate trade-offs between daily study volume, sleep targets, and habit adherence scores.
-4. **Actionable AI Recommendations**: Receive tailored, rule-based and LLM-synthesized advice to optimize productivity and spending.
-5. **Context-Grounded Conversational Assistant**: Interact with an AI assistant that queries verified user history and scenario models with resilient offline heuristics and Google Gemini integration.
+GrowthSync unifies these critical life verticals into an integrated operational dashboard and decision-support engine. By combining verified personal logs with statistical regression, rule-based heuristics, digital twin scenario simulations, and grounded AI models, GrowthSync provides actionable intelligence rather than static record-keeping.
+
+### Core Value Propositions
+1. **Unified Visibility**: Centralizes personal finances, categorized expenses, deep-work study hours, and daily wellness habits into a single executive dashboard.
+2. **Interactive Visual Analytics**: Delivers responsive SVG trend charts across financial savings, study intensity, and habit adherence with focused inspection tooltips.
+3. **Dual Digital Twin Simulators**:
+   - **Financial Twin**: Models multi-month liquidity, discretionary spending adjustments, and cash runway projections across 30, 60, and 90-day horizons.
+   - **Routine Twin**: Simulates daily schedule variations (study volume, sleep duration, habit targets) to predict academic pacing and burnout risk before committing to lifestyle changes.
+4. **Actionable AI Recommendations**: Automatically surfaces anomalies, discipline lapses, and positive momentum indicators through a tiered nudge framework.
+5. **Context-Grounded Conversational AI**: Offers a floating and dashboard-embedded AI assistant that queries verified database metrics to prevent hallucinations, backed by Google Gemini and an offline deterministic heuristic fallback.
 
 ---
 
 ## 🎯 Key Features
 
-### 📊 Unified Executive Dashboard
-- **Real-Time KPI Cards**: High-level visibility into total monthly savings, active habit completion rates, average study hours, and composite productivity index.
-- **Recent Activity Feed**: Real-time event logging capturing study sessions, financial transactions, and completed habits.
-- **Dynamic Charting**: Interactive visualizations of weekly time distribution, expense breakdowns, and score trajectories.
+### 📊 Executive Analytics & Interactive Growth Visualizer
+- **High-Impact KPI Cards**: Real-time summary of net monthly savings, active habit adherence rates, weekly study volume, and composite Growth Index.
+- **Interactive SVG Growth Graphs**: Dedicated trendlines and bar graphs for savings, study sessions, and wellness metrics (sleep, screen time, exercise) with keyboard and mouse inspection.
+- **Activity Stream**: Chronological event audit log tracking financial transactions, study milestones, and habit check-ins.
 
-### 💰 Financial & Expense Management
-- **Budget & Cash Flow Tracking**: Log monthly income, recurring commitments, and dynamic expense categorizations (Housing, Food, Tech, Leisure, etc.).
-- **Net Balance & Liquidity**: Automatic tracking of savings ratios, expense-to-income distribution, and liquidity trends.
+### 💰 Financial & Expense Intelligence
+- **Cash Flow & Budget Tracking**: Capture monthly gross income, baseline commitments, and dynamic expense categories (Housing, Utilities, Food, Tech, Leisure, etc.).
+- **Net Balance & Liquidity Curves**: Automatic calculation of savings ratios, discretionary burn rates, and rolling runway indicators.
 
-### 📚 Study & Deep-Work Sessions
-- **Subject-Specific Logging**: Track topic, duration, productivity rating, and notes.
-- **Academic Pacing**: Aggregate total hours studied across subjects to ensure target goals are consistently met.
+### 📚 Deep-Work & Study Pacing
+- **Subject-Specific Session Logging**: Record subject modules, duration, subjective productivity ratings (1–5 scale), and session reflection notes.
+- **Academic Pacing Analysis**: Monitor cumulative study volume against target benchmarks to maintain consistent exam readiness.
 
 ### ⚡ Habit Tracking & Streak Engine
-- **Daily Adherence Tracking**: Track critical habits (fitness, reading, coding, meditation).
-- **Streak Calculation**: Visual feedback on current and longest streaks to maintain daily discipline.
+- **Daily Discipline Logging**: Daily tracking of key personal habits (Coding, Reading, Exercise, Meditation, Sleep, Screen Time).
+- **Streak Calculation**: Continuous computation of active streaks, historical peak streaks, and completion percentages.
 
-### 🔮 Predictive Analytics & Forecasting
-- **Linear Trend Regression**: Statistical projection of personal finance savings curves and study-hour trends fitted strictly to verified personal historical logs.
-- **Productivity & Risk Scoring**: Weighted heuristic scoring combining habit consistency, study volume, and financial discipline to compute a balanced Growth Index.
+### 🔮 Statistical Forecasting & Growth Index
+- **Linear Trend Regression**: Statistical projection of personal finance trajectory and study volume curves using Scikit-Learn ordinary least squares (OLS) regression fitted to historical logs.
+- **Growth & Risk Scoring**: Composite index synthesizing habit consistency (40%), study volume (35%), and financial discipline (25%) into an actionable 0–100 score.
 
 ### 🧪 Dual Digital Twin Scenario Simulators
 - **Financial Digital Twin (`/api/simulation/financial-twin`)**:
-  - Run deterministic and stochastic what-if scenarios on monthly income, discretionary budget adjustments, and unexpected expenses.
-  - Multi-month runway projections (30, 60, 90 days) with net savings delta calculations.
+  - Simulates the downstream impact of income shocks, discretionary budget cuts, and unanticipated capital outlays.
+  - Generates 30, 60, and 90-day cash balance projections and net savings deltas.
 - **Routine Digital Twin (`/api/simulation/routine-twin`)**:
-  - Simulate daily routines across study hours, sleep hours, and habit consistency.
-  - Models projected burnout risk, academic pacing, and composite productivity balance before adopting schedule adjustments.
+  - Evaluates trade-offs between planned daily study hours, sleep targets, and habit consistency.
+  - Computes predictive burnout risk scores, academic completion pacing, and balanced routine stability.
 
 ### 💡 AI Recommendations & Insights Engine (`/api/simulation/recommendations`)
-- Automated detection of spending anomalies, study pacing deficits, and habit streak drop-offs.
-- Multi-tier synthesis providing immediate actions, preventative cautions, and positive reinforcers.
-- Built-in heuristic intelligence with optional Google Gemini LLM synthesis.
+- Automated detection of spending spikes, habit streak decay, and study pacing deficits.
+- Multi-tier insight categorization: **Immediate Actions**, **Preventative Cautions**, and **Positive Reinforcements**.
+- Deterministic heuristic logic with optional Google Gemini LLM synthesis.
 
-### 🤖 GrowthSync AI Assistant & Floating Chat (`/api/chat`)
-- **Evidence-Grounded Assistant**: Queries verified user metrics, active habits, and recent study logs to answer user questions accurately without hallucinations.
-- **Scenario Integration**: Automatically runs financial and routine simulations when asked what-if questions.
-- **Resilient Fallback Architecture**: Seamlessly operates in offline heuristic mode when an external LLM API key is not supplied.
-- **Modern UI Widget**: Available both as an embedded dashboard feature and as a floating expandable assistant.
+### 🤖 Grounded AI Chat Assistant (`/api/chat`)
+- **Zero-Hallucination Architecture**: Grounded in the user's verified database state and simulated digital twin projections.
+- **Dual Form Factor**: Available both as an embedded dashboard interface and as an expandable floating widget (`FloatingChat.jsx`).
+- **Resilient Fallback Mode**: Gracefully transitions to rule-based heuristic generation when an external LLM key is omitted or unreachable.
 
-### 🐳 Production-Ready Containerization
-- **Multi-Service Docker Compose**: Orchestrates PostgreSQL 16 Alpine, FastAPI backend, and Caddy reverse proxy.
-- **Automatic TLS & Same-Origin Proxy**: Caddy routes API requests and serves static assets under a unified origin.
-- **Hardened Security**: Strict CORS checks, HTTP-only secure cookies, non-root user execution, and database connection timeouts.
+### 🐳 Production-Hardened Deployment Stack
+- **Multi-Container Docker Architecture**: Configured via `compose.yaml` with PostgreSQL 16 Alpine, FastAPI ASGI server, and Caddy 2.9 reverse proxy.
+- **Automated TLS & Reverse Proxying**: Caddy serves static frontend production bundles and proxies `/api/*` requests under a single origin.
+- **Security Hardening**: HttpOnly session cookies, non-root container users, parameterized SQL queries, Bcrypt password hashing, and CORS filtering.
 
 ---
 
@@ -112,69 +116,97 @@ By modeling user historical data through regression trend fitting, heuristic eva
 
 ```mermaid
 graph TD
-    subgraph Browser["User Browser / Client"]
+    subgraph Client["Client Tier (User Browser)"]
         UI[React 19 + Vite Dashboard]
-        Sim[Digital Twin Simulators]
-        Chat[GrowthSync Chat Widget]
-        Recom[AI Recommendations Card]
+        Graphs[Interactive SVG Trend Visualizer]
+        Twins[Digital Twin Simulators]
+        ChatWidget[Floating & Embedded Chat]
+        Insights[AI Recommendations Card]
     end
 
-    subgraph Gateway["Reverse Proxy & Web Server"]
-        Caddy[Caddy 2.9 Web Proxy]
+    subgraph Gateway["Gateway & Reverse Proxy Tier"]
+        Caddy[Caddy 2.9 Web Server / Reverse Proxy]
     end
 
-    subgraph Backend["FastAPI Application Server"]
-        Router[API Router & Auth Middleware]
+    subgraph Backend["Application Server Tier (FastAPI)"]
+        Router[API Gateway & Router]
+        AuthGuard[JWT Auth Guard & Security Middleware]
         
-        subgraph CoreServices["Domain Services"]
+        subgraph DomainServices["Domain Service Layer"]
             AuthSvc[Auth & Profile Service]
-            FinSvc[Financial & Expense Engine]
+            FinSvc[Finance & Expense Engine]
             HabitSvc[Habit & Streak Tracker]
             StudySvc[Study Analytics Engine]
-            TwinSvc[Routine & Financial Twins]
+            TwinSvc[Digital Twin Simulation Engine]
             RecSvc[AI Recommendations Engine]
             ChatSvc[Context-Grounded Chat Service]
         end
 
-        subgraph ML["Analytics & Intelligence"]
-            LinReg[Scikit-Learn Trend Regression]
-            Scoring[Productivity & Risk Heuristics]
-            LLM[Gemini Provider + Heuristic Fallback]
+        subgraph ML["Analytics & Intelligence Engines"]
+            RegModel[Scikit-Learn OLS Regression]
+            RiskEngine[Burnout & Growth Scoring Heuristics]
+            LLMProvider[Gemini 3.6 Flash / Heuristic Fallback]
         end
     end
 
-    subgraph Persistence["Storage & External"]
+    subgraph Storage["Persistence & External Services"]
         PG[(PostgreSQL 16 Database)]
-        GeminiAPI[Google Gemini API]
+        Gemini[Google Gemini API]
     end
 
-    UI -->|HTTP / SPA| Caddy
-    Sim -->|HTTP / SPA| Caddy
-    Chat -->|HTTP / SPA| Caddy
-    Recom -->|HTTP / SPA| Caddy
+    UI -->|HTTPS / REST| Caddy
+    Graphs -->|Data Bindings| UI
+    Twins -->|HTTP / REST| Caddy
+    ChatWidget -->|HTTP / REST| Caddy
+    Insights -->|HTTP / REST| Caddy
 
     Caddy -->|/api/*| Router
-    Caddy -->|Static Assets| UI
+    Caddy -->|Static Assets / SPA| UI
 
-    Router --> CoreServices
-    CoreServices --> ML
-    CoreServices -->|SQLAlchemy ORM| PG
-    LLM -.->|Optional API Call| GeminiAPI
+    Router --> AuthGuard
+    AuthGuard --> DomainServices
+    DomainServices --> ML
+    DomainServices -->|SQLAlchemy 2.0 ORM| PG
+    LLMProvider -.->|Optional External API Call| Gemini
 ```
+
+---
+
+## 🔬 Digital Twin & Analytics Methodology
+
+### 1. Trend Regression Modeling
+GrowthSync fits verified historical entries to linear trend models using Scikit-Learn:
+$$\hat{y}(t) = \beta_0 + \beta_1 t$$
+Where $t$ represents elapsed days from baseline. The model projects 30-day future financial balance trajectories and study completion pace. If fewer than 2 distinct observations exist, conservative historical mean interpolation is used.
+
+### 2. Composite Growth Index
+Personal growth is quantified through a weighted, bounded composite index:
+$$\text{Growth Index} = w_{\text{habit}} \cdot S_{\text{habit}} + w_{\text{study}} \cdot S_{\text{study}} + w_{\text{finance}} \cdot S_{\text{finance}}$$
+- **Habit Adherence ($w_{\text{habit}} = 0.40$)**: Rolling 30-day habit completion percentage.
+- **Study Pacing ($w_{\text{study}} = 0.35$)**: Normalized study volume relative to academic targets.
+- **Financial Discipline ($w_{\text{finance}} = 0.25$)**: Savings ratio relative to net income.
+
+### 3. Digital Twin Burnout Risk Formulation
+The Routine Twin computes burnout risk based on excessive cognitive load and sleep deficits:
+$$\text{Burnout Risk} = \max\left(0, \min\left(100, \, \Delta_{\text{sleep}} \cdot 18 + \Delta_{\text{study}} \cdot 12 - \text{Adherence} \cdot 10\right)\right)$$
+Where $\Delta_{\text{sleep}} = \max(0, 7.5 - \text{Sleep Hours})$ and $\Delta_{\text{study}} = \max(0, \text{Study Hours} - 6.0)$.
 
 ---
 
 ## 💻 Technology Stack
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend** | React 19, Vite 8, Lucide React, Axios, Modern Responsive Vanilla CSS Design System |
-| **Backend Framework** | FastAPI, Uvicorn, Pydantic v2 (Settings & BaseModels), Python-Multipart, PyJWT, Passlib (Bcrypt) |
-| **Database & ORM** | PostgreSQL 16, SQLAlchemy 2.0, Psycopg2 |
-| **Analytics & ML** | NumPy, Pandas, Scikit-Learn (Linear Regression & Trend Modeling), Joblib |
-| **AI & LLM Services** | Google Gemini API (`gemini-3.6-flash`), Deterministic Rule-Based Heuristic Fallback |
-| **Container & Proxy** | Docker, Docker Compose, Caddy 2.9 (Reverse Proxy & Automatic HTTPS) |
-| **Testing & Quality** | Pytest (142 automated tests), Unittest, Ruff (Python Linting), Oxlint (Frontend Linting) |
+| Layer | Technologies & Libraries | Purpose |
+| :--- | :--- | :--- |
+| **Frontend UI** | React 19, Vite 8, Lucide React, Axios | Reactive component hierarchy and state management |
+| **Styling & Design** | Pure Modern CSS, Design Tokens, Glassmorphism | Custom design system with zero external UI framework dependencies |
+| **Backend Framework** | FastAPI 0.115+, Uvicorn 0.34+, Pydantic v2 | High-throughput asynchronous REST API and schema validation |
+| **Authentication** | PyJWT, Passlib (Bcrypt), HttpOnly Cookies | Stateless cryptographic token auth with secure cookie lifecycle |
+| **Database & ORM** | PostgreSQL 16 Alpine, SQLAlchemy 2.0, Psycopg2 | Relational schema persistence and query abstraction |
+| **Data Science & ML** | NumPy, Pandas, Scikit-Learn, Joblib | Time-series regression, statistical feature extraction, model inference |
+| **AI Integration** | Google Gemini API (`gemini-3.6-flash`), Heuristic Fallback | Grounded natural language conversational synthesis and advice generation |
+| **Reverse Proxy & TLS** | Caddy 2.9 | Automated TLS certificates, security headers, and API proxy routing |
+| **Containerization** | Docker, Docker Compose | Multi-container reproducible production deployment |
+| **Code Quality & Testing** | Pytest (142 tests), Ruff, Oxlint | End-to-end automated testing, verification, and code linting |
 
 ---
 
@@ -184,49 +216,52 @@ graph TD
 GrowthSync/
 ├── backend/
 │   ├── app/
-│   │   ├── core/                    # Security utils, password hashing, JWT helpers
-│   │   ├── models/                  # SQLAlchemy models (User, Expense, Habit, Study, etc.)
-│   │   ├── schemas/                 # Pydantic schemas (auth, chat, simulation, routine twin)
-│   │   ├── routes/                  # REST endpoints (auth, analytics, simulation, chat, etc.)
+│   │   ├── core/                    # Security utilities, JWT token encoding/decoding, password hashing
+│   │   ├── models/                  # SQLAlchemy ORM database models (User, Expense, Habit, Study, etc.)
+│   │   ├── schemas/                 # Pydantic schemas (auth, chat, simulation, routine twin, validation)
+│   │   ├── routes/                  # REST API endpoints (auth, analytics, simulation, chat, datasets)
 │   │   ├── services/                # Business logic (chat_service, routine_twin, ai_recommendations, llm_provider)
-│   │   ├── ml/                      # Trend fitting, risk scoring, and student data preprocessing
-│   │   ├── config.py                # Pydantic settings with production validation
-│   │   ├── database.py              # PostgreSQL engine & session lifecycle
-│   │   └── main.py                  # FastAPI application entrypoint & middleware setup
-│   ├── tests/                       # 142 unit & integration test cases
-│   ├── requirements.txt             # Core Python dependencies
-│   └── requirements.lock.txt        # Pinned lockfile with validated versions
+│   │   ├── ml/                      # Trend fitting, risk scoring, student dataset preprocessing
+│   │   ├── config.py                # Pydantic Settings with strict validation
+│   │   ├── database.py              # PostgreSQL engine and session factory
+│   │   └── main.py                  # FastAPI application entrypoint & middleware configuration
+│   ├── tests/                       # 142 automated unit and integration tests
+│   ├── requirements.txt             # Core Python runtime dependencies
+│   └── requirements.lock.txt        # Pinned lockfile with fully tested versions
 ├── frontend/
 │   ├── src/
-│   │   ├── api/                     # Configured Axios client with base URLs
-│   │   ├── components/              # Reusable UI components:
+│   │   ├── api/                     # Configured Axios client with baseURL and error interceptors
+│   │   ├── components/              # Modular UI components:
+│   │   │   ├── DashboardGraphs.jsx  # Interactive SVG trend visualizer (Finance, Study, Habits)
+│   │   │   ├── DashboardGraphs.css  # Chart styling, responsive grids, and focus states
 │   │   │   ├── FloatingChat.jsx     # Expandable floating assistant widget
-│   │   │   ├── GrowthSyncChat.jsx   # Interactive chat interface & assumption fields
-│   │   │   ├── RoutineSimulator.jsx # Routine digital twin sliders & controls
-│   │   │   ├── SimulatorSummary.jsx # Scenario impact metrics & visual feedback
-│   │   │   ├── AIRecommendations.jsx# Dynamic insight alerts & suggestions
-│   │   │   └── DashboardData.jsx    # Metric cards & data visualizations
+│   │   │   ├── GrowthSyncChat.jsx   # Embedded chat interface with scenario injection
+│   │   │   ├── RoutineSimulator.jsx # Routine digital twin sliders and controls
+│   │   │   ├── SimulatorSummary.jsx # Scenario impact metrics and visual feedback
+│   │   │   ├── AIRecommendations.jsx# Dynamic insight alerts and behavioral suggestions
+│   │   │   └── DashboardData.jsx    # Metric cards, transactions, and data tables
 │   │   ├── hooks/                   # Custom React hooks (useAIProvider, etc.)
 │   │   ├── pages/                   # Application views (Dashboard, Simulator, FinancialSimulator, etc.)
-│   │   ├── App.jsx                  # Main router and navigation layout
-│   │   └── index.css                # Polished design tokens, glassmorphism, responsive utilities
-│   ├── package.json                 # Node dependencies & scripts
-│   └── vite.config.js               # Vite build configuration
+│   │   ├── App.jsx                  # Main router, navigation header, and shell layout
+│   │   └── index.css                # Global design system, glassmorphism tokens, and responsive utilities
+│   ├── package.json                 # Frontend dependencies and build scripts
+│   └── vite.config.js               # Vite bundler configuration
 ├── deploy/
 │   ├── Dockerfile.backend           # Multi-stage lightweight Python backend image
 │   ├── Dockerfile.web               # Multi-stage Vite build + Caddy web server
-│   └── Caddyfile                    # Caddy reverse proxy & security headers configuration
-├── compose.yaml                     # Production & local Docker Compose stack
-├── datasets/                        # Example and sanitized benchmarking datasets
+│   └── Caddyfile                    # Caddy reverse proxy, TLS, and security headers configuration
+├── compose.yaml                     # Unified Docker Compose configuration
+├── datasets/                        # Sanitized training datasets and benchmark references
 ├── docs/
 │   ├── MILESTONES.md                # Feature deliverables and roadmap tracking
 │   ├── MILESTONE_4_CHANGES.md       # Implementation notes for Milestone 4
-│   ├── MILESTONE_4_DEPLOYMENT.md    # Production deployment and backup guide
+│   ├── MILESTONE_4_DEPLOYMENT.md    # Production deployment and operational guide
 │   └── CLEANUP_REPORT.md            # Code quality and audit logs
-├── .dockerignore                    # Build exclusion rules for Docker images
+├── .dockerignore                    # Build exclusion rules for Docker
 ├── .env.example                     # Environment template for local Python development
-├── .env.docker.example              # Environment template for Docker Compose
+├── .env.docker.example              # Environment template for Docker Compose deployment
 ├── .gitignore                       # Multi-layer git ignore rules
+├── package.json                     # Root package configuration for convenience scripts
 └── README.md                        # Project documentation
 ```
 
@@ -252,13 +287,13 @@ GrowthSync/
    python -m venv .venv
    .\.venv\Scripts\Activate.ps1
    ```
-   *For macOS/Linux:*
+   *For macOS / Linux:*
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate
    ```
 
-2. **Install dependencies**:
+2. **Install Python dependencies**:
    ```bash
    pip install -r backend/requirements.txt
    ```
@@ -267,29 +302,29 @@ GrowthSync/
    ```powershell
    Copy-Item .env.example .env
    ```
-   Update `.env` with your PostgreSQL credentials, and generate a secure `SECRET_KEY`:
+   Generate a cryptographic secret key:
    ```bash
    python -c "import secrets; print(secrets.token_hex(32))"
    ```
-   *(Optional)* Add `GEMINI_API_KEY` if you wish to enable live Gemini LLM responses. If omitted, the platform runs in intelligent offline heuristic mode.
+   Update `.env` with your PostgreSQL database credentials and generated secret key.
 
-4. **Initialize the Database**:
+4. **Verify Connectivity & Initialize Database**:
    ```bash
    python backend/verify_db_conn.py
    python backend/init_db.py
    ```
 
-5. **Start the FastAPI Backend**:
+5. **Start the FastAPI Backend Server**:
    ```bash
    python -m uvicorn backend.app.main:app --reload --port 8000
    ```
    - API Server: `http://localhost:8000`
-   - Swagger Documentation: `http://localhost:8000/docs`
+   - Interactive Swagger Docs: `http://localhost:8000/docs`
    - Health Check: `http://localhost:8000/health`
 
 #### 2. Frontend Setup
 
-1. **Navigate to the frontend directory**:
+1. **Navigate to the frontend directory and install dependencies**:
    ```bash
    cd frontend
    npm install
@@ -305,7 +340,7 @@ GrowthSync/
 
 ### Option B: Containerized Deployment (Docker Compose)
 
-Deploy the entire stack (PostgreSQL + FastAPI + Caddy Web Server) with a single command:
+Deploy the full stack (PostgreSQL + FastAPI + Caddy Reverse Proxy) with a single command:
 
 1. **Prepare the Docker environment file**:
    ```powershell
@@ -318,17 +353,17 @@ Deploy the entire stack (PostgreSQL + FastAPI + Caddy Web Server) with a single 
    ```
    Paste the generated values into `.env.docker`.
 
-3. **Build and launch the containers**:
+3. **Build and launch the stack**:
    ```bash
    docker compose --env-file .env.docker up --build -d
    ```
 
-4. **Access the application**:
+4. **Verify container status and access application**:
    - Web App & API Gateway: `http://localhost:8080`
    - Health Check: `http://localhost:8080/health`
-   - Container Status: `docker compose --env-file .env.docker ps`
+   - Check status: `docker compose --env-file .env.docker ps`
 
-5. **Stop containers**:
+5. **Tear down containers**:
    ```bash
    docker compose --env-file .env.docker down
    ```
@@ -339,120 +374,144 @@ Deploy the entire stack (PostgreSQL + FastAPI + Caddy Web Server) with a single 
 
 ### Local Development (`.env`)
 
-| Variable | Description | Default / Example |
-| :--- | :--- | :--- |
-| `DATABASE_URL` | SQLAlchemy PostgreSQL connection URI | `postgresql+psycopg2://postgres:password@localhost:5432/infosys_deep` |
-| `SECRET_KEY` | Cryptographic secret for signing JWT tokens | *Generated 64-character hex string* |
-| `ALGORITHM` | Cryptographic algorithm for JWT signatures | `HS256` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES`| Session token validity window | `1440` (24 Hours) |
-| `ENVIRONMENT` | Runtime mode (`development` / `production`) | `development` |
-| `ALLOWED_ORIGINS` | Comma-delimited CORS allowed origins | `http://localhost:5173,http://127.0.0.1:5173` |
-| `FRONTEND_URL` | Base URL of the client application | `http://localhost:5173` |
-| `PORT` | Backend uvicorn server port | `8000` |
-| `GEMINI_API_KEY` | *(Optional)* Google Gemini API key for LLM chat | `""` (Empty defaults to offline heuristic fallback) |
-| `GEMINI_MODEL` | Google Gemini model identifier | `gemini-3.6-flash` |
+| Variable | Type | Description | Default / Example |
+| :--- | :---: | :--- | :--- |
+| `DATABASE_URL` | String | SQLAlchemy PostgreSQL connection URI | `postgresql+psycopg2://postgres:password@localhost:5432/infosys_deep` |
+| `SECRET_KEY` | String | 64-character cryptographic key for JWT signing | *Required strong secret* |
+| `ALGORITHM` | String | Cryptographic algorithm for JWT signatures | `HS256` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES`| Integer | Session token validity duration in minutes | `1440` (24 Hours) |
+| `ENVIRONMENT` | String | Runtime environment (`development` / `production`) | `development` |
+| `ALLOWED_ORIGINS` | String | Comma-delimited list of allowed CORS origins | `http://localhost:5173,http://127.0.0.1:5173` |
+| `FRONTEND_URL` | String | Base URL of client application | `http://localhost:5173` |
+| `PORT` | Integer | Backend server port | `8000` |
+| `GEMINI_API_KEY` | String | Google Gemini API key for live AI generation | `""` (Empty enables offline heuristic mode) |
+| `GEMINI_MODEL` | String | Target Google Gemini model identifier | `gemini-3.6-flash` |
 
 ### Docker Compose (`.env.docker`)
 
-| Variable | Description | Default / Example |
-| :--- | :--- | :--- |
-| `POSTGRES_PASSWORD` | Password for PostgreSQL `growthsync` user | *Required strong secret* |
-| `SECRET_KEY` | JWT signing key (min 32 characters) | *Required strong secret* |
-| `ENVIRONMENT` | Deployment environment | `development` or `production` |
-| `FRONTEND_URL` | Public frontend URL | `http://localhost:8080` |
-| `SITE_ADDRESS` | Caddy listening address or domain name | `:80` (or `growthsync.example.com`) |
-| `WEB_HTTP_PORT` | Host HTTP listening port | `8080` (or `80`) |
-| `WEB_HTTPS_PORT` | Host HTTPS listening port | `8443` (or `443`) |
-| `GEMINI_API_KEY` | *(Optional)* Gemini API Key | `""` |
-| `GEMINI_MODEL` | Gemini model name | `gemini-3.6-flash` |
-
----
-
-## 🧪 Verification & Quality Assurance
-
-GrowthSync includes a comprehensive test suite covering authentication, data tracking, scenario simulation, chat grounding, and configuration constraints:
-
-```bash
-# 1. Run all 142 backend unit and integration tests
-pytest backend/tests -v
-
-# 2. Run specific service test suites
-pytest backend/tests/test_chat.py -v
-pytest backend/tests/test_routine_twin.py -v
-pytest backend/tests/test_ai_recommendations.py -v
-pytest backend/tests/test_deployment_config.py -v
-
-# 3. Lint Python files with Ruff
-ruff check backend
-
-# 4. Lint Frontend codebase with Oxlint
-npm --prefix frontend run lint
-
-# 5. Verify Frontend Production Build
-npm --prefix frontend run build
-```
+| Variable | Type | Description | Default / Example |
+| :--- | :---: | :--- | :--- |
+| `POSTGRES_PASSWORD` | String | Password for internal PostgreSQL user | *Required strong secret* |
+| `SECRET_KEY` | String | JWT signing secret key (minimum 32 characters) | *Required strong secret* |
+| `ENVIRONMENT` | String | Deployment mode (`development` / `production`) | `production` |
+| `FRONTEND_URL` | String | Public origin URL | `http://localhost:8080` |
+| `SITE_ADDRESS` | String | Caddy bind address or domain name | `:80` |
+| `WEB_HTTP_PORT` | Integer | Host HTTP port exposed by Caddy | `8080` (or `80`) |
+| `WEB_HTTPS_PORT` | Integer | Host HTTPS port exposed by Caddy | `8443` (or `443`) |
+| `GEMINI_API_KEY` | String | *(Optional)* Google Gemini API key | `""` |
+| `GEMINI_MODEL` | String | Gemini model identifier | `gemini-3.6-flash` |
 
 ---
 
 ## 🔌 API Endpoints Overview
 
-| Area | Method | Endpoint | Description |
-| :--- | :---: | :--- | :--- |
-| **System** | `GET` | `/health` | Application & database connectivity health check |
-| **Auth** | `POST` | `/api/auth/register` | Register a new user account |
-| **Auth** | `POST` | `/api/auth/login` | Authenticate user & issue secure HTTP-only cookie |
-| **Auth** | `POST` | `/api/auth/logout` | Invalidate active user session |
-| **Auth** | `POST` | `/api/auth/forgot-password` | Request password reset token |
-| **Auth** | `POST` | `/api/auth/reset-password` | Complete password reset with token |
-| **User** | `GET` / `PUT`| `/api/users/me` | Fetch or update user profile information |
-| **Finance** | `GET` / `POST`| `/api/financial/` | Retrieve and record monthly income & savings goals |
-| **Expenses**| `GET` / `POST`| `/api/expenses/` | Fetch breakdown & record new categorized expenses |
-| **Expenses**| `DELETE` | `/api/expenses/{id}` | Remove specific expense item |
-| **Study** | `GET` / `POST`| `/api/study/` | Log study sessions and view subject allocations |
-| **Habits** | `GET` / `POST`| `/api/habits/` | Track daily habits, completions, and streaks |
-| **Analytics**| `GET` | `/api/analytics/dashboard` | Aggregated metrics, scores, and recent activity |
-| **Analytics**| `GET` | `/api/analytics/forecast` | Personal time-series regression projections |
-| **Simulation**| `POST`| `/api/simulation/what-if` | Scenario projection based on input parameters |
-| **Simulation**| `POST`| `/api/simulation/financial-twin`| Multi-month digital twin financial runway projection |
-| **Simulation**| `POST`| `/api/simulation/routine-twin` | Daily study/sleep/habit digital twin scenario model |
-| **Simulation**| `GET` | `/api/simulation/recommendations` | AI-generated recommendations and risk insights |
-| **Chat** | `POST` | `/api/chat/` | Context-aware AI chat assistant with scenario modeling |
-| **Data** | `GET` | `/api/datasets/export/csv` | Export user activity records as downloadable CSV |
+| Category | Method | Endpoint | Description | Auth Required |
+| :--- | :---: | :--- | :--- | :---: |
+| **System** | `GET` | `/health` | Application & database connectivity health check | No |
+| **Auth** | `POST` | `/api/auth/register` | Register new user account | No |
+| **Auth** | `POST` | `/api/auth/login` | Authenticate user & issue HttpOnly JWT cookie | No |
+| **Auth** | `POST` | `/api/auth/logout` | Invalidate active user session | Yes |
+| **Auth** | `POST` | `/api/auth/forgot-password`| Request password reset token | No |
+| **Auth** | `POST` | `/api/auth/reset-password` | Complete password reset using token | No |
+| **User** | `GET` / `PUT`| `/api/users/me` | Fetch or update user profile details | Yes |
+| **Finance** | `GET` / `POST`| `/api/financial/` | Fetch or record monthly income and savings | Yes |
+| **Expenses**| `GET` / `POST`| `/api/expenses/` | Fetch expense breakdown or log new expense | Yes |
+| **Expenses**| `DELETE` | `/api/expenses/{id}` | Delete specific expense entry | Yes |
+| **Study** | `GET` / `POST`| `/api/study/` | Log study sessions and view subject allocations | Yes |
+| **Habits** | `GET` / `POST`| `/api/habits/` | Track daily habits, completions, and streaks | Yes |
+| **Analytics**| `GET` | `/api/analytics/dashboard` | Aggregated metrics, composite scores, and activity | Yes |
+| **Analytics**| `GET` | `/api/analytics/forecast` | Personal time-series regression projections | Yes |
+| **Simulation**| `POST`| `/api/simulation/what-if` | Deterministic scenario projection | Yes |
+| **Simulation**| `POST`| `/api/simulation/financial-twin`| Multi-month digital twin financial runway model | Yes |
+| **Simulation**| `POST`| `/api/simulation/routine-twin` | Daily study/sleep/habit digital twin scenario model | Yes |
+| **Simulation**| `GET` | `/api/simulation/recommendations` | AI-generated recommendations and risk insights | Yes |
+| **Chat** | `POST` | `/api/chat/` | Context-grounded AI conversational assistant | Yes |
+| **Datasets**| `GET` | `/api/datasets/export/csv` | Export verified user records as downloadable CSV | Yes |
 
-Interactive Swagger documentation is available at `http://localhost:8000/docs` (or via Caddy at `/docs` when deployed).
+*Full OpenAPI/Swagger specification is accessible at `http://localhost:8000/docs`.*
+
+---
+
+## 🧪 Verification & Quality Assurance
+
+GrowthSync maintains high engineering standards with 142 automated tests covering authentication security, regression forecasting, scenario simulations, database transactions, and deployment configurations:
+
+```bash
+# 1. Run full backend test suite (142 tests)
+pytest backend/tests -v
+
+# 2. Run domain-specific test suites
+pytest backend/tests/test_chat.py -v
+pytest backend/tests/test_financial_twin.py -v
+pytest backend/tests/test_routine_twin.py -v
+pytest backend/tests/test_ai_recommendations.py -v
+pytest backend/tests/test_deployment_config.py -v
+
+# 3. Python code quality inspection with Ruff
+ruff check backend
+
+# 4. Frontend lint check with Oxlint
+npm --prefix frontend run lint
+
+# 5. Production frontend bundle build verification
+npm --prefix frontend run build
+```
 
 ---
 
 ## 🗺️ Milestone Roadmap
 
-- [x] **Milestone 1: Core Foundation & Data Collection**
-  - Secure authentication flow (JWT, Bcrypt, HTTP-only cookies).
-  - Profile management, password recovery, and session guard.
-  - Multi-module tracking: Financials, Expenses, Study Sessions, and Daily Habits.
-  - Audit timeline logging and CSV export utility.
+- [x] **Milestone 1: Core Foundation & Data Tracking**
+  - Robust authentication lifecycle (Bcrypt, JWT, secure HttpOnly cookie management).
+  - Profile administration, session guard middleware, password reset workflow.
+  - Tracking modules for Financials, Categorized Expenses, Study Sessions, and Daily Habits.
+  - Audit timeline logging and sanitized CSV export engine.
 
-- [x] **Milestone 2: Analytics, Forecasting & Simulation**
-  - Statistical feature engineering and rolling metric aggregations.
+- [x] **Milestone 2: Analytics, Trend Modeling & Scenario Simulation**
+  - Statistical feature engineering and rolling temporal aggregations.
   - Linear regression trend fitting on personal historical logs.
-  - Growth & Productivity composite scoring index.
+  - Composite Growth & Risk Scoring Index.
   - Interactive What-If Scenario Simulator for personal decision support.
 
 - [x] **Milestone 3: Financial Digital Twin & Scenario Modeling**
   - Advanced Financial Digital Twin (`/api/simulation/financial-twin`) for multi-month runway forecasting.
-  - Discretionary budget tuning and savings delta impact calculation.
-  - Dataset preparation pipelines and academic benchmark evaluation.
+  - Discretionary budget tuning, shock simulation, and savings delta calculation.
+  - Benchmark evaluation and dataset ingestion pipelines.
 
 - [x] **Milestone 4: Routine Twin, AI Recommendations, Assistant Chat & Deployment**
   - Routine Twin Simulator (`/api/simulation/routine-twin`) modeling study, sleep, and habit consistency trade-offs.
   - AI Recommendations Engine (`/api/simulation/recommendations`) providing personalized behavioral nudges.
-  - Conversational AI Assistant (`/api/chat`) with ground-truth verification and heuristic/Gemini fallback.
-  - Multi-container Docker Compose deployment with Caddy reverse proxy and automatic HTTPS.
-  - Tested dependency lockfile (`backend/requirements.lock.txt`) and 142 automated tests passing.
+  - Context-Grounded Conversational AI Assistant (`/api/chat`) with zero-hallucination verification.
+  - Floating chat assistant widget (`FloatingChat.jsx`) and SVG growth trendline visualizer (`DashboardGraphs.jsx`).
+  - Production containerization via Docker Compose, Caddy reverse proxy, and automated HTTPS.
+  - Verified lockfile (`backend/requirements.lock.txt`) and 142/142 passing tests.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork the Repository** on GitHub.
+2. **Create a Feature Branch**:
+   ```bash
+   git checkout -b feat/your-feature-name
+   ```
+3. **Commit Your Changes** following Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`):
+   ```bash
+   git commit -m "feat: add your descriptive feature commit message"
+   ```
+4. **Run Verification**: Ensure all tests pass (`pytest backend/tests`) and code lints cleanly (`ruff check backend`, `npm --prefix frontend run lint`).
+5. **Push to Your Branch**:
+   ```bash
+   git push origin feat/your-feature-name
+   ```
+6. **Open a Pull Request** describing your changes and verification steps.
 
 ---
 
 ## 📄 License & Acknowledgements
 
-This project was engineered by **Deep Bisen** as part of the **Infosys Springboard Internship** program.
+Developed with passion by **Deep Bisen** as part of the **Infosys Springboard Internship** program.
 
-Distributed under the **MIT License**. See `LICENSE` for details.
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for complete terms.
